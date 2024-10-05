@@ -1,1 +1,1 @@
-vcbvxcfb
+print("Привет")
