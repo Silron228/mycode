@@ -20,7 +20,7 @@ def DisplayMap(map):
         print(end = "\n")
 
 def MakeMove(id, map):
-DisplayMap(map)
+      DisplayMap(map)
 
 
 
