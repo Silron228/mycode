@@ -5,8 +5,8 @@ algebrs = ["pawn", "knight", "bishop", "rook", "queen", "king"]
 amount = [8, 2, 2, 2, 1, 1]
 
 block = [("■", "white"), ("□", "black")]
-alf = ["a", "b", "c", "d", "e", "f", "g", "h"]
-numder = [str(i) for i in range(1, 9)]
+alf = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
+numder = [str(i) for i in range(1, 9)][::-1]
 
 pawns_figur = []
 knights_figur, bishops_figur, rooks_figur = [], [], []
@@ -31,6 +31,7 @@ def create_figur():
   
 def create_desk():
     desk = []
+    # создаем список чередуемых квадратиков
     def plant():
         form = []
         for i in range(1, 9):
@@ -38,17 +39,30 @@ def create_desk():
             else: n = block[0][0]
             form.append(n)
         return form
-    
+
+    # создаем чередование реверсов
     mode = plant()[::-1]
     for i in range(8):
         desk.append(mode[::-1])
-        mode = mode[::-1]    
-        
+        mode = mode[::-1]   
+    
+    # добавляем цифорки на доску
+    for k in range(len(desk)):
+        def rev():
+            desk[k].append(numder[k])
+            desk[k] = desk[k][::-1]
+        rev(), rev()
+    
+    # добавляем буковки
+    for i in range(2):
+        desk.append(alf)
+        desk = desk[::-1]
+    
     for i in desk:
         print(i)
         
-    # def graphics():
-    #     pass
+def disposal():
+    pass
 
 def handler():
     pass
