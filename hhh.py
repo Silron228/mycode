@@ -66,25 +66,29 @@ def create_desk():
         
 def disposal():
     def pawn_mid():
+        global pawns_figur
         def pawns(color, amount):
+            global pawns_figur
+            if color == "black": 
+                pawns_figur = pawns_figur[::-1]
             for i1 in range(1, 9):
                 for pawn in pawns_figur:
                     if pawn[2] == color:
                         desk[amount][i1] = pawn[3]
                         pawns_figur[i1-1][-1].append(i1)
-                        pawns_figur[i1-1][-1].append(amount)
+                        pawns_figur[i1-1][-1].append(amount)              
+            if color == "black": 
+                pawns_figur = pawns_figur[::-1]           
         pawns("white", 7)
         pawns("black", 2)
-                
-        for i1 in range(8):          
-            pawns_figur[i1][-1] = pawns_figur[i1][-1][:2]
-
-                    
-            
-            
-                    
-                   
-    
+        
+        def rev():
+            global pawns_figur
+            for i in range(8):
+                pawns_figur[i][-1] = pawns_figur[i][-1][:2]  
+            pawns_figur = pawns_figur[::-1]  
+        rev(), rev()
+        
     pawn_mid() 
 
 def handler():
