@@ -2,10 +2,13 @@
 white_frame = ["♙", "♞", "♝", "♜", "♛", "♚"]
 black_frame = ["♙", '♘', "♗", "♖", "♕", "♔"]
 algebrs = ["pawn", "knight", "bishop", "rook", "queen", "king"]
+number = [8, 2, 2, 2, 1, 1]
 
 pawns_figur = []
 knights_figur, bishops_figur, rooks_figur = [], [], []
 king_figur, queen_figur = [], []
+
+all_figur = [pawns_figur, knights_figur, bishops_figur, rooks_figur, king_figur, queen_figur]
 
 class Figur():
     def __init__(self, name, color, frame) -> None:
@@ -24,22 +27,18 @@ def index_frame(n):
     return algebrs.index(n)
 
 def create_figur(listas: list, colors, name, amount):
-    for i in range(1, amount + 1):
+    for i in range(amount):
         listas.append(Figur(name, colors, flag(colors)[index_frame(name)]).constructor())
 
 def create_two(coler):
-    create_figur(pawns_figur, coler, "pawn", 8)
-    create_figur(knights_figur, coler, "knight", 2)
-    create_figur(bishops_figur, coler, "bishop", 2)
-    create_figur(rooks_figur, coler, "rook", 2)
-    create_figur(queen_figur, coler, "queen", 1)
-    create_figur(king_figur, coler, "king", 1)
-    
+    for i in range(len(algebrs)):
+        create_figur(all_figur[i], coler, algebrs[i], number[0])
+ 
 def create():
     create_two("white"), create_two("black")
 
 if __name__ == "__main__":
     create()
     
-    print(pawns_figur + knights_figur + bishops_figur + rooks_figur + king_figur + queen_figur)
+    print(all_figur)
     
