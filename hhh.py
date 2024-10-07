@@ -58,11 +58,13 @@ def create_desk():
     for _ in range(2):
         desk.append(alf1)
         desk = desk[::-1]
-        
+    
+    desk_archive = desk.copy()
+    
 def disposal():
     
+    # растановка пешек
     def pawn_mid():
-        
         def reverse_pawns(booling):
             global pawns_figur
             if booling != " ": pawns_figur = pawns_figur[::-1]
@@ -83,8 +85,23 @@ def disposal():
             for i in range(8):
                 pawns_figur[i][-1] = pawns_figur[i][-1][:2]  
             reverse_pawns(True) 
-        rev(), rev()       
+        rev(), rev()  
+        
+    def knight_mid():
+        pass
+                
+           
+    # сначала поиск move по координатам, потом расставить
+    # 1 - handler and moves
+    # 2 - disposal
+        
+        
+        
+        
+        
+             
     pawn_mid() 
+    knight_mid()
 
 def handler():
     pass
