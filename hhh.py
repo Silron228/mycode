@@ -21,7 +21,7 @@ def create_figur():
 
     def create(listas: list, colors, name, amount1):
         for i in range(amount1):
-            listas.append((name, colors, flag(colors)[algebrs.index(name)]))
+            listas.append((i+1, name, colors, flag(colors)[algebrs.index(name)], True, "x", "y"))
 
     def create_two(coler):
         for i in range(len(algebrs)):
@@ -35,26 +35,27 @@ def create_desk():
     def plant():
         form = []
         for i in range(1, 9):
-            if (i % 2 == 0): n = block[1][0]
-            else: n = block[0][0]
-            form.append(n)
+            if (i % 2 == 0): 
+                form.append(block[1][0])
+            else:
+                form.append(block[0][0]) 
         return form
 
     # создаем чередование реверсов
     mode = plant()[::-1]
-    for i in range(8):
+    for _ in range(8):
         desk.append(mode[::-1])
         mode = mode[::-1]   
     
     # добавляем цифорки на доску
-    for k in range(len(desk)):
+    for i in range(len(desk)):
         def rev():
-            desk[k].append(numder[k])
-            desk[k] = desk[k][::-1]
+            desk[i].append(numder[i])
+            desk[i] = desk[i][::-1]
         rev(), rev()
     
     # добавляем буковки
-    for i in range(2):
+    for _ in range(2):
         desk.append(alf)
         desk = desk[::-1]
     
