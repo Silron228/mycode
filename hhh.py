@@ -6,7 +6,7 @@ amount = [8, 2, 2, 2, 1, 1]
 
 desk = []
 block = [("■", "white"), ("□", "black")]
-alf = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
+alf1 = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
 numder = [str(i) for i in range(1, 9)][::-1]
 
 pawns_figur = []
@@ -26,8 +26,7 @@ def create_figur():
 
     def create_two(coler):
         for i in range(len(algebrs)):
-            create(all_figur[i], coler, algebrs[i], amount[i])
-       
+            create(all_figur[i], coler, algebrs[i], amount[i])    
     create_two("white"), create_two("black")
   
 def create_desk():
@@ -57,38 +56,34 @@ def create_desk():
     
     # добавляем буковки
     for _ in range(2):
-        desk.append(alf)
+        desk.append(alf1)
         desk = desk[::-1]
-    
-    print(" ")
-    for i in desk:
-        print(i)
         
 def disposal():
+    
     def pawn_mid():
-        global pawns_figur
-        def pawns(color, amount):
+        
+        def reverse_pawns(booling):
             global pawns_figur
-            if color == "black": 
-                pawns_figur = pawns_figur[::-1]
+            if booling != " ": pawns_figur = pawns_figur[::-1]
+            
+        def pawns(color, amount):
+            if color == "black": reverse_pawns(True)
             for i1 in range(1, 9):
                 for pawn in pawns_figur:
                     if pawn[2] == color:
                         desk[amount][i1] = pawn[3]
                         pawns_figur[i1-1][-1].append(i1)
                         pawns_figur[i1-1][-1].append(amount)              
-            if color == "black": 
-                pawns_figur = pawns_figur[::-1]           
+            if color == "black": reverse_pawns(True)       
         pawns("white", 7)
         pawns("black", 2)
         
         def rev():
-            global pawns_figur
             for i in range(8):
                 pawns_figur[i][-1] = pawns_figur[i][-1][:2]  
-            pawns_figur = pawns_figur[::-1]  
-        rev(), rev()
-        
+            reverse_pawns(True) 
+        rev(), rev()       
     pawn_mid() 
 
 def handler():
@@ -97,16 +92,15 @@ def handler():
 def moves():
     pass
 
+def print_desk():
+    for i in desk:
+        print(" ".join(i))
 
 if __name__ == "__main__":
     create_figur()
-    
-    create_desk()
-    
+    create_desk() 
     disposal()
     
-    for i in all_figur:
-        print(i)  
-        
-    for i in desk:
-        print(i)
+    for i in all_figur: print(i)  
+    
+    print_desk()
