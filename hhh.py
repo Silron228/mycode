@@ -15,12 +15,9 @@ def create():
         if col == "white": return white_frame
         else: return black_frame
 
-    def index_frame(n):
-        return algebrs.index(n)
-
     def create_figur(listas: list, colors, name, amount):
         for i in range(amount):
-            listas.append((name, colors, flag(colors)[index_frame(name)]))
+            listas.append((name, colors, flag(colors)[algebrs.index(name)]))
 
     def create_two(coler):
         for i in range(len(algebrs)):
