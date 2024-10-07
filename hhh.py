@@ -4,6 +4,7 @@ black_frame = ["♙", '♘', "♗", "♖", "♕", "♔"]
 algebrs = ["pawn", "knight", "bishop", "rook", "queen", "king"]
 amount = [8, 2, 2, 2, 1, 1]
 
+desk = []
 block = [("■", "white"), ("□", "black")]
 alf = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
 numder = [str(i) for i in range(1, 9)][::-1]
@@ -21,7 +22,7 @@ def create_figur():
 
     def create(listas: list, colors, name, amount1):
         for i in range(amount1):
-            listas.append((i+1, name, colors, flag(colors)[algebrs.index(name)], True, "x", "y"))
+            listas.append([i+1, name, colors, flag(colors)[algebrs.index(name)], True, []])
 
     def create_two(coler):
         for i in range(len(algebrs)):
@@ -30,7 +31,7 @@ def create_figur():
     create_two("white"), create_two("black")
   
 def create_desk():
-    desk = []
+    global desk
     # создаем список чередуемых квадратиков
     def plant():
         form = []
@@ -59,11 +60,32 @@ def create_desk():
         desk.append(alf)
         desk = desk[::-1]
     
+    print(" ")
     for i in desk:
         print(i)
         
 def disposal():
-    pass
+    def pawn_mid():
+        def pawns(color, amount):
+            for i1 in range(1, 9):
+                for pawn in pawns_figur:
+                    if pawn[2] == color:
+                        desk[amount][i1] = pawn[3]
+                        pawns_figur[i1-1][-1].append(i1)
+                        pawns_figur[i1-1][-1].append(amount)
+        pawns("white", 7)
+        pawns("black", 2)
+                
+        for i1 in range(8):          
+            pawns_figur[i1][-1] = pawns_figur[i1][-1][:2]
+
+                    
+            
+            
+                    
+                   
+    
+    pawn_mid() 
 
 def handler():
     pass
@@ -75,10 +97,12 @@ def moves():
 if __name__ == "__main__":
     create_figur()
     
-    for i in all_figur:
-        print(i)
-    
     create_desk()
-
     
+    disposal()
     
+    for i in all_figur:
+        print(i)  
+        
+    for i in desk:
+        print(i)

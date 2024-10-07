@@ -23,4 +23,3 @@ def MakeMove(id, map):
       DisplayMap(map)
 
 
-
