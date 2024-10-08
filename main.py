@@ -2,14 +2,20 @@ map = [[0]*8]*8
 
 def Beauty(hop):
     match hop.split():
-          case[0]:
+            case[0]:
                 return 0
-          case[1]:
+            case[1]:
                 return "P"
-          case[2]:
-                return 0
-          case[3]:
-                return 0
+            case[2]:
+                return "C"
+            case[3]:
+                return "F"  
+            case[4]:
+                  return "K"
+            case[5]:
+                return "R"
+            case[6]:
+                return "B"
           
     
 
