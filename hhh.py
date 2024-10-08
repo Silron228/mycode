@@ -83,9 +83,9 @@ def disposal():
         pawn_plant(2, white_frame)
         pawn_plant(7, black_frame)
 
-    def rook_bishop_knight_mid(): 
-        def rook_bishop_knight_plant(row, color_frame, number_frame, figur, a, b, c):
-            for i in range(a, b, c):
+    def rbk_mid(): 
+        def rbk_plant(row, color_frame, number_frame, figur, a, b):
+            for i in range(a, 8, b):
                 cord = handler(alf0[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[number_frame]
 
@@ -95,13 +95,12 @@ def disposal():
                 else:
                     figur[2][-1] = cord
                     figur[3][-1] = cord
-            
-        rook_bishop_knight_plant(1, white_frame, 3, rooks_figur, 0, 8, 7)
-        rook_bishop_knight_plant(8, black_frame, 3, rooks_figur, 0, 8, 7)  
-        rook_bishop_knight_plant(1, white_frame, 2, bishops_figur, 2, 7, 3)
-        rook_bishop_knight_plant(8, black_frame, 2, bishops_figur, 2, 7, 3)   
-        rook_bishop_knight_plant(1, white_frame, 1, knights_figur, 1, 8, 5)
-        rook_bishop_knight_plant(8, black_frame, 1, knights_figur, 1, 8, 5)       
+        
+        def joil(color, k):
+            rbk_plant(k, color, 1, knights_figur, 1, 5)
+            rbk_plant(k, color, 2, bishops_figur, 2, 3)
+            rbk_plant(k, color, 3, rooks_figur,   0, 7)
+        joil(white_frame, 1), joil(black_frame, 8)
 
     def queen_king_mid(): 
         def queen_king_plant(row, color_frame, number_frame, figur):
@@ -112,13 +111,13 @@ def disposal():
             else:
                 figur[-1][-1] = cord
 
-        queen_king_plant(1, white_frame, 4, queen_figur)
-        queen_king_plant(8, black_frame, 4, queen_figur)
-        queen_king_plant(1, white_frame, 5, king_figur)
-        queen_king_plant(8, black_frame, 5, king_figur)
+        def joil(color, k):
+            queen_king_plant(k, color, 4, queen_figur)
+            queen_king_plant(k, color, 5, king_figur)
+        joil(white_frame, 1), joil(black_frame, 8)
                   
     pawn_mid() 
-    rook_bishop_knight_mid()
+    rbk_mid()
     queen_king_mid()
 
 
@@ -128,15 +127,13 @@ def handler(move):
         for i in move:
             if (i in alf0 or i.lower() in alf0) or (i == "-") or (i in numder):
                 move_hand = [i.lower() for i in move if "-" not in i]
-
                 # откуда
                 try:
                     x1 = alf0.index(move_hand[0])+1
                     y1 = numder.index(move_hand[1])+1
                 except ValueError:
                     moves()
-
-                
+        
                 if len(move) == 5:
                     # куда
                     try:
@@ -160,37 +157,39 @@ def handler(move):
     
 def moves():
     # e4-e5 or E4-E5
-    move = str(input("-"))
-
-    mov = handler(move)
-
-    # пешка
+    mov = handler(str(input("-")))
     
-    if desk[mov[0]][mov[1]] == white_frame[0]:
-        for i in pawns_figur:
-            # двойной ход
-            if str([mov[0]]+[mov[1]]) == str(i[-1]):
-                if mov[1] == mov[-1] and mov[0] == mov[-2]+2:
-                    if i[-2] == False:
-                        desk[mov[2]][mov[3]] = white_frame[0]
-                        i[-1] = [mov[2], mov[3]]
-                        desk[mov[0]][mov[1]] = desk_archive[mov[0]][mov[1]]
-                        i[-2] = True
+    y1, x1 = mov[0], mov[1] 
+    y2, x2 = mov[2], mov[3]
+    
+    # пешка
+    def move_pawn():
+        def true_move(pawn):
+            desk[y2][x2] = white_frame[0]
+            pawn[-1] = [y2, x2]
+            desk[y1][x1] = desk_archive[y1][x1]
+            pawn[-2] = True
+            
+        for pawn in pawns_figur: 
+            if (desk[y2][x2] == block[0][0] or desk[y2][x2] == block[1][0]):
+                if str([y1]+[x1]) == str(pawn[-1]):
+                    if x1 == x2 and (y1 == y2 + 2):
+                        if pawn[-2] == False:
+                            if (desk[y2 + 1][x2] == block[0][0] or desk[y2 + 1][x2] == block[1][0]):
+                                true_move(pawn)
+                                break
+                        else:
+                            print("not move"), moves()
+                    elif x1 == x2 and (y1 == y2 + 1):
+                        true_move(pawn)
+                        break
                     else:
                         print("not move"), moves()
-                # одиночный ход
-                elif mov[1] == mov[-1] and mov[0] == mov[-2]+1:
-                    desk[mov[2]][mov[3]] = white_frame[0]
-                    i[-1] = [mov[2], mov[3]]
-                    desk[mov[0]][mov[1]] = desk_archive[mov[0]][mov[1]]
-                    i[-2] = True
-                else:
-                    print("not move"), moves()
-
-
-
-
-
+            else: 
+                print("not move"), moves()
+                    
+    if desk[y1][x1] == white_frame[0]: move_pawn()
+    
 def print_desk():
     for i in desk:
         print(" ".join(i))
