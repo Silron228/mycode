@@ -206,16 +206,25 @@ def moves():
         
         def move_bishop():
             for i in range(9):
+
+                result, k = [], 0
+                
                 if (y1 == y2 + i and x1 == x2 + i):     
-                    k = 0
-                    while (y2 + k != y1 and x2 + k != x1):          
+                    while (y2 + k != y1 and x2 + k != x1):    
+                        if desk[y2][x2] == desk[y2+k][x2+k] and desk[y2][x2] in black_frame:  
+                            result.append(True) 
                         if desk[y2+k][x2+k] not in block:
-                            return False
+                            result.append(False)
                         k+=1
-                    return True
+                    if result.count(False) == 1 and result.count(True) == 1:
+                        return True
+                    elif result.count(False) > 0 and result.count(True) != 1:
+                        return False
+                    else: 
+                        return True
+
 
                 if (y1 == y2 - i and x1 == x2 + i):     
-                    k = 0
                     while (y2 - k != y1 and x2 + k != x1):          
                         if desk[y2-k][x2+k] not in block:
                             return False
@@ -223,7 +232,6 @@ def moves():
                     return True
 
                 if (y1 == y2 + i and x1 == x2 - i):     
-                    k = 0
                     while (y2 + k != y1 and x2 - k != x1):          
                         if desk[y2+k][x2-k] not in block:
                             return False
@@ -231,7 +239,6 @@ def moves():
                     return True
                 
                 if (y1 == y2 - i and x1 == x2 - i):     
-                    k = 0
                     while y2 - k != y1 and x2 - k != x1:          
                         if desk[y2-k][x2-k] not in block:
                             return False
@@ -268,5 +275,5 @@ if __name__ == "__main__":
     print_desk()
     while True:
         moves()
-        for i in all_figur: print(i) 
+        # for i in all_figur: print(i) 
         print_desk()
