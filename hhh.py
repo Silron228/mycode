@@ -3,18 +3,15 @@ import copy
 
 white_frame = ["♙", "♞", "♝", "♜", "♛", "♚"]
 black_frame = ["♙", '♘', "♗", "♖", "♕", "♔"]
-algebrs = ["pawn", "knight", "bishop", "rook", "queen", "king"]
+names = ["pawn", "knight", "bishop", "rook", "queen", "king"]
 amount = [8, 2, 2, 2, 1, 1]
 
-desk = []
-block = ["■", "□"]
-alf = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
-alf0 = ["a", "b", "c", "d", "e", "f", "g", "h"]
+desk, block = [], ["■", "□"]
+alf = ["a", "b", "c", "d", "e", "f", "g", "h"]
 numder = [str(i) for i in range(1, 9)][::-1]
 
-pawns_figur = []
 knights_figur, bishops_figur, rooks_figur = [], [], []
-king_figur, queen_figur = [], []
+pawns_figur, king_figur, queen_figur = [], [], []
 
 all_figur = [pawns_figur, knights_figur, bishops_figur, rooks_figur, queen_figur, king_figur]
 
@@ -26,11 +23,11 @@ def create_figur():
 
     def create(listas: list, colors, name, amount1):
         for i in range(amount1):
-            listas.append([i+1, name, colors, flag(colors)[algebrs.index(name)], True, False, []])
+            listas.append([i+1, name, colors, flag(colors)[names.index(name)], True, False, []])
 
     def create_two(coler):
-        for i in range(len(algebrs)):
-            create(all_figur[i], coler, algebrs[i], amount[i])    
+        for i in range(len(names)):
+            create(all_figur[i], coler, names[i], amount[i])    
     create_two("white"), create_two("black")
   
 def create_desk():
@@ -60,23 +57,22 @@ def create_desk():
     
     # добавляем буковки
     for _ in range(2):
-        desk.append(alf)
+        desk.append([" "]+alf+[" "])
         desk = desk[::-1]
     
     desk_archive = copy.deepcopy(desk)
     
-def disposal():
-    
+def setting():
     # растановка пешек
-    def pawn_mid():
+    def pawn_setting():
 
         def reverse_figur(booling):
             global pawns_figur
             if booling != " ": pawns_figur = pawns_figur[::-1]
         
         def pawn_plant(row, color_frame):
-            for i in range(len(alf0)):
-                cord = handler(alf0[i] + str(row))
+            for i in range(len(alf)):
+                cord = handler(alf[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[0]
                 pawns_figur[i][-1] = cord
             reverse_figur(True)
@@ -84,11 +80,11 @@ def disposal():
         pawn_plant(2, white_frame)
         pawn_plant(7, black_frame)
 
-    def rbk_mid(): 
+    def rbk_setting(): 
         def rbk_plant(row, color_frame, number_frame, figur, a, b):
             nm = 0
             for i in range(a, 8, b):
-                cord = handler(alf0[i] + str(row))
+                cord = handler(alf[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[number_frame]
 
                 if row == 1:
@@ -116,7 +112,7 @@ def disposal():
 
     def queen_king_mid(): 
         def queen_king_plant(row, color_frame, number_frame, figur):
-            cord = handler(alf0[number_frame-1] + str(row))
+            cord = handler(alf[number_frame-1] + str(row))
             desk[cord[0]][cord[1]] = color_frame[number_frame]
 
             if row == 1: figur[0][-1] = cord
@@ -127,8 +123,8 @@ def disposal():
             queen_king_plant(k, color, 5, king_figur)
         joil(white_frame, 1), joil(black_frame, 8)
                   
-    pawn_mid() 
-    rbk_mid()
+    pawn_setting() 
+    rbk_setting()
     queen_king_mid()
 
 
@@ -136,11 +132,11 @@ def handler(move):
     
     if len(move) == 5 or len(move) == 2:
         for i in move:
-            if (i in alf0 or i.lower() in alf0) or (i == "-") or (i in numder):
+            if (i in alf or i.lower() in alf) or (i == "-") or (i in numder):
                 move_hand = [i.lower() for i in move if "-" not in i]
                 # откуда
                 try:
-                    x1 = alf0.index(move_hand[0])+1
+                    x1 = alf.index(move_hand[0])+1
                     y1 = numder.index(move_hand[1])+1
                     
                 except ValueError: moves()
@@ -148,7 +144,7 @@ def handler(move):
                 if len(move) == 5:
                     # куда
                     try:
-                        x2 = alf0.index(move_hand[2])+1
+                        x2 = alf.index(move_hand[2])+1
                         y2 = numder.index(move_hand[3])+1
 
                     except ValueError: moves()
@@ -166,8 +162,11 @@ def handler(move):
     else: not_move()
     
 def moves():
+    global mov
     # e4-e5 or E4-E5
-    mov = handler(str(input("-")))
+    try:
+        mov = handler(str(input("-")))
+    except KeyboardInterrupt: print(" game off"), exit()
     
     y1, x1 = mov[0], mov[1] 
     y2, x2 = mov[2], mov[3]
@@ -201,38 +200,45 @@ def moves():
         def move_knight():
             if (((x1 == x2 + 1) or (x1 == x2 - 1)) and ((y1 == y2 + 2) or (y1 == y2 - 2))) or \
                 (((x1 == x2 + 2) or (x1 == x2 - 2)) and ((y1 == y2 + 1) or (y1 == y2 - 1))):
-                return True
+                    if desk[y2][x2] not in white_frame:
+                        return True
+                    else: not_move()
         
         def move_bishop():
             for i in range(9):
-                if (x1 == x2 + i and y1 == y2 + i):
-                    print(x2 + i, y2 + i)
-                    if desk[x2+i][y2+i] not in block:
-                        return False
-                        break
+                if (y1 == y2 + i and x1 == x2 + i):     
+                    k = 0
+                    while (y2 + k != y1 and x2 + k != x1):          
+                        if desk[y2+k][x2+k] not in block:
+                            return False
+                        k+=1
+                    return True
 
+                if (y1 == y2 - i and x1 == x2 + i):     
+                    k = 0
+                    while (y2 - k != y1 and x2 + k != x1):          
+                        if desk[y2-k][x2+k] not in block:
+                            return False
+                        k+=1
                     return True
-                    break
-                elif (x1 == x2 + i and y1 == y2 - i):
-                    if desk[x2+i][y2-i] not in block:
-                        return False
-                        break
-         
-                    return True
-                    break    
-                elif (x1 == x2 - i and y1 == y2 + i):
-                    if desk[x2-i][y2+i] not in block:
-                        return False
-                        break
 
+                if (y1 == y2 + i and x1 == x2 - i):     
+                    k = 0
+                    while (y2 + k != y1 and x2 - k != x1):          
+                        if desk[y2+k][x2-k] not in block:
+                            return False
+                        k+=1
                     return True
-                    break  
-                elif (x1 == x2 - i and y1 == y2 - i):
-                    if desk[x2-i][y2-i] not in block:
-                        return False
-                        break
+                
+                if (y1 == y2 - i and x1 == x2 - i):     
+                    k = 0
+                    while y2 - k != y1 and x2 - k != x1:          
+                        if desk[y2-k][x2-k] not in block:
+                            return False
+                        k+=1
                     return True
-                    break             
+                    
+                  
                     
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
@@ -245,7 +251,7 @@ def moves():
                 else: not_move()
         
         if frame == 1: move_dauble_figur(all_figur[frame], move_knight())
-        elif frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
+        if frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
 
 
     # если выбранная фигура
@@ -258,7 +264,7 @@ def print_desk(): [print(" ".join(i)) for i in desk]
 def not_move(): print("not move"), moves()
   
 if __name__ == "__main__":
-    create_figur(), create_desk(), disposal()
+    create_figur(), create_desk(), setting()
     print_desk()
     while True:
         moves()
