@@ -17,7 +17,7 @@ def Beauty(hop):
             case[6]:
                 return "B"
           
-    
+
 
 def DisplayMap(map):
     for i in range(8):

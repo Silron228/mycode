@@ -7,7 +7,7 @@ algebrs = ["pawn", "knight", "bishop", "rook", "queen", "king"]
 amount = [8, 2, 2, 2, 1, 1]
 
 desk = []
-block = [("■", "white"), ("□", "black")]
+block = ["■", "□"]
 alf = [" ", "a", "b", "c", "d", "e", "f", "g", "h", " "]
 alf0 = ["a", "b", "c", "d", "e", "f", "g", "h"]
 numder = [str(i) for i in range(1, 9)][::-1]
@@ -19,6 +19,7 @@ king_figur, queen_figur = [], []
 all_figur = [pawns_figur, knights_figur, bishops_figur, rooks_figur, queen_figur, king_figur]
 
 def create_figur():
+
     def flag(col):
         if col == "white": return white_frame
         else: return black_frame
@@ -39,9 +40,9 @@ def create_desk():
         form = []
         for i in range(1, 9):
             if (i % 2 == 0): 
-                form.append(block[1][0])
+                form.append(block[1])
             else:
-                form.append(block[0][0]) 
+                form.append(block[0]) 
         return form
 
     # создаем чередование реверсов
@@ -85,16 +86,27 @@ def disposal():
 
     def rbk_mid(): 
         def rbk_plant(row, color_frame, number_frame, figur, a, b):
+            nm = 0
             for i in range(a, 8, b):
                 cord = handler(alf0[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[number_frame]
 
                 if row == 1:
-                    figur[0][-1] = cord
-                    figur[1][-1] = cord
+                    if nm == 0:
+                        duble = copy.deepcopy(cord)
+                        figur[0][-1] = cord
+                        nm +=1
+                    if duble != cord:
+                        figur[1][-1] = cord
+                    
                 else:
-                    figur[2][-1] = cord
-                    figur[3][-1] = cord
+                    if nm == 0:
+                        duble = copy.deepcopy(cord)
+                        figur[2][-1] = cord
+                        nm +=1
+                    if duble != cord:
+                        figur[3][-1] = cord
+                    
         
         def joil(color, k):
             rbk_plant(k, color, 1, knights_figur, 1, 5)
@@ -106,10 +118,9 @@ def disposal():
         def queen_king_plant(row, color_frame, number_frame, figur):
             cord = handler(alf0[number_frame-1] + str(row))
             desk[cord[0]][cord[1]] = color_frame[number_frame]
-            if row == 1:
-                figur[0][-1] = cord
-            else:
-                figur[-1][-1] = cord
+
+            if row == 1: figur[0][-1] = cord
+            else: figur[-1][-1] = cord
 
         def joil(color, k):
             queen_king_plant(k, color, 4, queen_figur)
@@ -131,29 +142,28 @@ def handler(move):
                 try:
                     x1 = alf0.index(move_hand[0])+1
                     y1 = numder.index(move_hand[1])+1
-                except ValueError:
-                    moves()
+                    
+                except ValueError: moves()
         
                 if len(move) == 5:
                     # куда
                     try:
                         x2 = alf0.index(move_hand[2])+1
                         y2 = numder.index(move_hand[3])+1
-                    except ValueError:
-                        moves()
 
-                    if desk[y1][x1] == block[0][0] or \
-                        desk[y1][x1]== block[1][0]:
+                    except ValueError: moves()
 
-                            print("not move"), moves()
+                    if desk[y1][x1] == block[0] or \
+                        desk[y1][x1]== block[1]:
+                            not_move()
                     else:
                         print(desk[y1][x1], "->", desk[y2][x2])
 
                         return [y1, x1, y2, x2]
                 else:
                     return [y1, x1]
-            else:
-                print("not move"), moves()
+            else: not_move()
+    else: not_move()
     
 def moves():
     # e4-e5 or E4-E5
@@ -163,47 +173,93 @@ def moves():
     y2, x2 = mov[2], mov[3]
     
     # пешка
+    def true_move(pawn, k):
+        desk[y2][x2] = white_frame[k]
+        pawn[-1] = [y2, x2]
+        desk[y1][x1] = desk_archive[y1][x1]
+        pawn[-2] = True
+
+        
     def move_pawn():
-        def true_move(pawn):
-            desk[y2][x2] = white_frame[0]
-            pawn[-1] = [y2, x2]
-            desk[y1][x1] = desk_archive[y1][x1]
-            pawn[-2] = True
-            
         for pawn in pawns_figur: 
-            if (desk[y2][x2] == block[0][0] or desk[y2][x2] == block[1][0]):
+            if (desk[y2][x2] in block):
                 if str([y1]+[x1]) == str(pawn[-1]):
                     if x1 == x2 and (y1 == y2 + 2):
                         if pawn[-2] == False:
-                            if (desk[y2 + 1][x2] == block[0][0] or desk[y2 + 1][x2] == block[1][0]):
-                                true_move(pawn)
+                            if (desk[y2 + 1][x2] in block):
+                                true_move(pawn, 0)
                                 break
-                        else:
-                            print("not move"), moves()
+                        else: not_move()
                     elif x1 == x2 and (y1 == y2 + 1):
-                        true_move(pawn)
+                        true_move(pawn,0)
                         break
-                    else:
-                        print("not move"), moves()
-            else: 
-                print("not move"), moves()
+                    else: not_move()
+            else: not_move()
+
+    def move_kbr(frame):
+
+        def move_knight():
+            if (((x1 == x2 + 1) or (x1 == x2 - 1)) and ((y1 == y2 + 2) or (y1 == y2 - 2))) or \
+                (((x1 == x2 + 2) or (x1 == x2 - 2)) and ((y1 == y2 + 1) or (y1 == y2 - 1))):
+                return True
+        
+        def move_bishop():
+            for i in range(9):
+                if (x1 == x2 + i and y1 == y2 + i):
+                    print(x2 + i, y2 + i)
+                    if desk[x2+i][y2+i] not in block:
+                        return False
+                        break
+
+                    return True
+                    break
+                elif (x1 == x2 + i and y1 == y2 - i):
+                    if desk[x2+i][y2-i] not in block:
+                        return False
+                        break
+         
+                    return True
+                    break    
+                elif (x1 == x2 - i and y1 == y2 + i):
+                    if desk[x2-i][y2+i] not in block:
+                        return False
+                        break
+
+                    return True
+                    break  
+                elif (x1 == x2 - i and y1 == y2 - i):
+                    if desk[x2-i][y2-i] not in block:
+                        return False
+                        break
+                    return True
+                    break             
                     
+        def move_dauble_figur(clas_figur, type_figur):
+            for cl in clas_figur:
+                if (desk[y2][x2] in (block+black_frame)):
+                    if str([y1]+[x1]) == str(cl[-1]):
+                        if type_figur == True:
+                            true_move(cl, frame)
+                            break
+                        else: not_move()                
+                else: not_move()
+        
+        if frame == 1: move_dauble_figur(all_figur[frame], move_knight())
+        elif frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
+
+
+    # если выбранная фигура
     if desk[y1][x1] == white_frame[0]: move_pawn()
+    for i in range(1, 5):
+        if desk[y1][x1] == white_frame[i]: move_kbr(i)
     
-def print_desk():
-    for i in desk:
-        print(" ".join(i))
-    
+def print_desk(): [print(" ".join(i)) for i in desk]
 
+def not_move(): print("not move"), moves()
+  
 if __name__ == "__main__":
-    create_figur()
-    create_desk() 
-    disposal()
-    
-    for i in all_figur: print(i)  
-    
+    create_figur(), create_desk(), disposal()
     print_desk()
-
     while True:
         moves()
         for i in all_figur: print(i) 
