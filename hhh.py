@@ -16,7 +16,6 @@ pawns_figur, king_figur, queen_figur = [], [], []
 all_figur = [pawns_figur, knights_figur, bishops_figur, rooks_figur, queen_figur, king_figur]
 
 def create_figur():
-
     def flag(col):
         if col == "white": return white_frame
         else: return black_frame
@@ -86,24 +85,22 @@ def setting():
             for i in range(a, 8, b):
                 cord = handler(alf[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[number_frame]
-
+                
+                
                 if row == 1:
                     if nm == 0:
                         duble = copy.deepcopy(cord)
                         figur[0][-1] = cord
                         nm +=1
-                    if duble != cord:
-                        figur[1][-1] = cord
+                    if duble != cord: figur[1][-1] = cord
                     
                 else:
                     if nm == 0:
                         duble = copy.deepcopy(cord)
                         figur[2][-1] = cord
                         nm +=1
-                    if duble != cord:
-                        figur[3][-1] = cord
+                    if duble != cord: figur[3][-1] = cord
                     
-        
         def joil(color, k):
             rbk_plant(k, color, 1, knights_figur, 1, 5)
             rbk_plant(k, color, 2, bishops_figur, 2, 3)
@@ -123,9 +120,7 @@ def setting():
             queen_king_plant(k, color, 5, king_figur)
         joil(white_frame, 1), joil(black_frame, 8)
                   
-    pawn_setting() 
-    rbk_setting()
-    queen_king_mid()
+    pawn_setting(), rbk_setting(), queen_king_mid()
 
 def handler(move):
     
@@ -159,7 +154,7 @@ def handler(move):
     else: not_move()
     
 def moves():
-    global mov
+    global mov, y1, x1, y2, x2
     # e4-e5 or E4-E5
     try:
         mov = handler(str(input("-")))
@@ -221,10 +216,8 @@ def moves():
                  
                     if result.count(False) == 2 and result.count(True) == 1:
                         resultat = True  
-                    elif result.count(False) > 2: 
-                        resultat = False               
-                    else: 
-                        resultat = True    
+                    elif result.count(False) > 2: resultat = False               
+                    else: resultat = True    
                 
                 if (y1 == y2 + i and x1 == x2 + i): instakl("+", "+")
                 if (y1 == y2 - i and x1 == x2 + i): instakl("-", "+")
@@ -234,7 +227,6 @@ def moves():
             if resultat == " ": print("не работает")
             return resultat              
                   
-                    
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
                 if (desk[y2][x2] in (block+black_frame) and (desk[y2][x2] not in white_frame)):
@@ -242,7 +234,8 @@ def moves():
                         if type_figur == True:
                             true_move(cl, frame)
                             break
-                        else: not_move()                
+                        else: not_move()    
+                    else: print("нет такой фигуры")            
                 else: not_move()
         
         if frame == 1: move_dauble_figur(all_figur[frame], move_knight())
@@ -257,11 +250,17 @@ def moves():
 def print_desk(): [print(" ".join(i)) for i in desk]
 
 def not_move(): print("not move"), moves()
+
+def print_all_figur():
+    [print(i) for i in pawns_figur], [print("\n")]
+    [print(i) for i in knights_figur], [print("\n")]
+    [print(i) for i in bishops_figur]
+
   
 if __name__ == "__main__":
     create_figur(), create_desk(), setting()
     print_desk()
     while True:
         moves()
-        # for i in all_figur: print(i) 
+        print_all_figur()
         print_desk()
