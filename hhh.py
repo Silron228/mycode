@@ -136,8 +136,7 @@ def handler(move):
                 # откуда
                 try:
                     x1 = alf.index(move_hand[0])+1
-                    y1 = numder.index(move_hand[1])+1
-                    
+                    y1 = numder.index(move_hand[1])+1           
                 except ValueError: moves()
         
                 if len(move) == 5:
@@ -145,7 +144,6 @@ def handler(move):
                     try:
                         x2 = alf.index(move_hand[2])+1
                         y2 = numder.index(move_hand[3])+1
-
                     except ValueError: moves()
 
                     if desk[y1][x1] == block[0] or \
@@ -202,33 +200,36 @@ def moves():
                         return True
                     else: not_move()
         
-        def move_bishop(k = 0):
-            global resultat
-            
-            resultat = " "
+        def move_bishop():
+            global resultat, k, result
+            resultat = "X"    
             for i in range(9):
+                k = 0        
                 def instakl(yk, xk):
-                    result = []       
-                    global resultat           
-                    while (yk != y1 and xk != x1):    
-                        if desk[y2][x2] == desk[yk][xk] and desk[y2][x2] in black_frame:  
+                    global k, result, resultat
+                    result = []          
+                    y0 = (eval(str(y2)+yk+str(k)))
+                    x0 = (eval(str(x2)+xk+str(k)))                  
+                    while (y0 != y1 and x0 != x1):                    
+                        y0 = (eval(str(y2)+yk+str(k)))
+                        x0 = (eval(str(x2)+xk+str(k)))                
+                        if desk[y2][x2] == desk[y0][x0] and desk[y2][x2] in black_frame:  
                             result.append(True) 
-                        if desk[yk][xk] not in block:
-                            result.append(False)
-                        k+=1
-                    if result.count(False) == 1 and result.count(True) == 1:
+                        if desk[y0][x0] not in block:
+                            result.append(False)                       
+                        k+=1 
+                 
+                    if result.count(False) == 2 and result.count(True) == 1:
                         resultat = True  
-                    elif result.count(False) > 1: 
+                    elif result.count(False) > 2: 
                         resultat = False               
                     else: 
-                        resultat = True
+                        resultat = True    
                 
-                    print(result)
-                
-                if (y1 == y2 + i and x1 == x2 + i): instakl(y2 + k, x2 + k)
-                if (y1 == y2 - i and x1 == x2 + i): instakl(y2 - k, x2 + k)
-                if (y1 == y2 + i and x1 == x2 - i): instakl(y2 + k, x2 - k)
-                if (y1 == y2 - i and x1 == x2 - i): instakl(y2 - k, x2 - k)
+                if (y1 == y2 + i and x1 == x2 + i): instakl("+", "+")
+                if (y1 == y2 - i and x1 == x2 + i): instakl("-", "+")
+                if (y1 == y2 + i and x1 == x2 - i): instakl("+", "-")
+                if (y1 == y2 - i and x1 == x2 - i): instakl("-", "-")
                 
             if resultat == " ": print("не работает")
             return resultat              
@@ -236,7 +237,7 @@ def moves():
                     
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
-                if (desk[y2][x2] in (block+black_frame)):
+                if (desk[y2][x2] in (block+black_frame) and (desk[y2][x2] not in white_frame)):
                     if str([y1]+[x1]) == str(cl[-1]):
                         if type_figur == True:
                             true_move(cl, frame)
