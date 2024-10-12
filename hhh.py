@@ -127,7 +127,6 @@ def setting():
     rbk_setting()
     queen_king_mid()
 
-
 def handler(move):
     
     if len(move) == 5 or len(move) == 2:
@@ -178,7 +177,6 @@ def moves():
         desk[y1][x1] = desk_archive[y1][x1]
         pawn[-2] = True
 
-        
     def move_pawn():
         for pawn in pawns_figur: 
             if (desk[y2][x2] in block):
@@ -204,47 +202,36 @@ def moves():
                         return True
                     else: not_move()
         
-        def move_bishop():
+        def move_bishop(k = 0):
+            global resultat
+            
+            resultat = " "
             for i in range(9):
-
-                result, k = [], 0
-                
-                if (y1 == y2 + i and x1 == x2 + i):     
-                    while (y2 + k != y1 and x2 + k != x1):    
-                        if desk[y2][x2] == desk[y2+k][x2+k] and desk[y2][x2] in black_frame:  
+                def instakl(yk, xk):
+                    result = []       
+                    global resultat           
+                    while (yk != y1 and xk != x1):    
+                        if desk[y2][x2] == desk[yk][xk] and desk[y2][x2] in black_frame:  
                             result.append(True) 
-                        if desk[y2+k][x2+k] not in block:
+                        if desk[yk][xk] not in block:
                             result.append(False)
                         k+=1
                     if result.count(False) == 1 and result.count(True) == 1:
-                        return True
-                    elif result.count(False) > 0 and result.count(True) != 1:
-                        return False
+                        resultat = True  
+                    elif result.count(False) > 1: 
+                        resultat = False               
                     else: 
-                        return True
-
-
-                if (y1 == y2 - i and x1 == x2 + i):     
-                    while (y2 - k != y1 and x2 + k != x1):          
-                        if desk[y2-k][x2+k] not in block:
-                            return False
-                        k+=1
-                    return True
-
-                if (y1 == y2 + i and x1 == x2 - i):     
-                    while (y2 + k != y1 and x2 - k != x1):          
-                        if desk[y2+k][x2-k] not in block:
-                            return False
-                        k+=1
-                    return True
+                        resultat = True
                 
-                if (y1 == y2 - i and x1 == x2 - i):     
-                    while y2 - k != y1 and x2 - k != x1:          
-                        if desk[y2-k][x2-k] not in block:
-                            return False
-                        k+=1
-                    return True
-                    
+                    print(result)
+                
+                if (y1 == y2 + i and x1 == x2 + i): instakl(y2 + k, x2 + k)
+                if (y1 == y2 - i and x1 == x2 + i): instakl(y2 - k, x2 + k)
+                if (y1 == y2 + i and x1 == x2 - i): instakl(y2 + k, x2 - k)
+                if (y1 == y2 - i and x1 == x2 - i): instakl(y2 - k, x2 - k)
+                
+            if resultat == " ": print("не работает")
+            return resultat              
                   
                     
         def move_dauble_figur(clas_figur, type_figur):
