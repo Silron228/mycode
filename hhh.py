@@ -222,8 +222,49 @@ def moves():
                 if (y1 == y2 + i and x1 == x2 - i): instakl("+", "-")
                 if (y1 == y2 - i and x1 == x2 - i): instakl("-", "-")               
             return resultat   
-                   
+        
+        def move_rook(): 
+            for i in range(9):
+                k = 0
+                result = []
+                resultat = "X" 
+                if (y1 == y2 + i) and (x1 == x2): 
+                    while (y2 + k != y1):
+                        if desk[y2][x2] == desk[y2 + k][x2] and desk[y2][x2] in black_frame:  
+                            result.append(True) 
+                        if desk[y2 + k][x2] not in block:
+                            result.append(False) 
+                        k+=1
+                        
+                if (y1 == y2 - i) and (x1 == x2):
+                    while (y2 - k != y1):
+                        if desk[y2][x2] == desk[y2 - k][x2] and desk[y2][x2] in black_frame:  
+                            result.append(True) 
+                        if desk[y2 - k][x2] not in block:
+                            result.append(False) 
+                        k+=1
+                        
+                if (x1 == x2 + i) and (y1 == y2):
+                    while (x2 + k != y1):
+                        if desk[y2][x2] == desk[y2][x2 + k] and desk[y2][x2] in black_frame:  
+                            result.append(True) 
+                        if desk[y2][x2 + k] not in block:
+                            result.append(False) 
+                        k+=1
+                        
+                if (x1 == x2 - i) and (y1 == y2):
+                    while (x2 - k != y1):
+                        if desk[y2][x2] == desk[y2][x2 - k] and desk[y2][x2] in black_frame:  
+                            result.append(True) 
+                        if desk[y2][x2 - k] not in block:
+                            result.append(False) 
+                        k+=1
+                if result.count(False) == 2 and result.count(True) == 1: resultat = True
+                elif result.count(False) > 2: resultat = False               
+                else: resultat = True
+                return resultat 
                   
+        
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
                 if (desk[y2][x2] in (block+black_frame)):
@@ -237,6 +278,7 @@ def moves():
         
         if frame == 1: move_dauble_figur(all_figur[frame], move_knight())
         if frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
+        if frame == 3: move_dauble_figur(all_figur[frame], move_rook())
 
 
     # если выбранная фигура
