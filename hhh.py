@@ -85,8 +85,7 @@ def setting():
             for i in range(a, 8, b):
                 cord = handler(alf[i] + str(row))
                 desk[cord[0]][cord[1]] = color_frame[number_frame]
-                
-                
+                   
                 if row == 1:
                     if nm == 0:
                         duble = copy.deepcopy(cord)
@@ -260,11 +259,28 @@ def moves():
                             result.append(False) 
                         k+=1
                 if result.count(False) == 2 and result.count(True) == 1: resultat = True
-                elif result.count(False) > 2: resultat = False               
+                elif result.count(False) >= 2: resultat = False               
                 else: resultat = True
                 return resultat 
-                  
         
+        def move_queen(): 
+            flag = 2
+            for i in range(1, 9):
+                if ((y1 == y2 + i) and (x1 == x2)) or ((y1 == y2 - i) and (x1 == x2)) or\
+                    ((x1 == x2 + i) and (y1 == y2)) or ((x1 == x2 - i) and (y1 == y2)):
+                        flag = 0
+                        
+            for i in range(1, 9):
+                if (y1 == y2 + i and x1 == x2 + i) or (y1 == y2 - i and x1 == x2 + i) or\
+                    (y1 == y2 + i and x1 == x2 - i) or (y1 == y2 - i and x1 == x2 - i):
+                        flag = 1
+                        
+            print(flag)                 
+            if flag == 1: 
+                return move_bishop()
+            elif flag == 0: 
+                return move_rook()
+                    
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
                 if (desk[y2][x2] in (block+black_frame)):
@@ -279,6 +295,7 @@ def moves():
         if frame == 1: move_dauble_figur(all_figur[frame], move_knight())
         if frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
         if frame == 3: move_dauble_figur(all_figur[frame], move_rook())
+        if frame == 4: move_dauble_figur(all_figur[frame], move_queen())
 
 
     # если выбранная фигура
@@ -302,5 +319,4 @@ def play():
 
 if __name__ == "__main__":
     create_figur(), create_desk(), setting()
-    print_desk()
     play()      
