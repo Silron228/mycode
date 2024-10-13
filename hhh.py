@@ -264,7 +264,7 @@ def moves():
                 return resultat 
         
         def move_queen(): 
-            flag = 2
+            flag = "_"
             for i in range(1, 9):
                 if ((y1 == y2 + i) and (x1 == x2)) or ((y1 == y2 - i) and (x1 == x2)) or\
                     ((x1 == x2 + i) and (y1 == y2)) or ((x1 == x2 - i) and (y1 == y2)):
@@ -280,6 +280,9 @@ def moves():
                 return move_bishop()
             elif flag == 0: 
                 return move_rook()
+            
+        def move_king():
+            if x1 == x2 + 1 or x1 == x2 - 1 : pass
                     
         def move_dauble_figur(clas_figur, type_figur):
             for cl in clas_figur:
@@ -296,6 +299,7 @@ def moves():
         if frame == 2: move_dauble_figur(all_figur[frame], move_bishop())
         if frame == 3: move_dauble_figur(all_figur[frame], move_rook())
         if frame == 4: move_dauble_figur(all_figur[frame], move_queen())
+        if frame == 5: move_dauble_figur(all_figur[frame], move_king())
 
 
     # если выбранная фигура
